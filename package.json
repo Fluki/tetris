@@ -1,0 +1,13 @@
+{
+  "name": "tetris",
+  "version": "1.0",
+  "description": "Simple game of tetris",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.42.0"
+  },
+  "dependencies": {
+    "webpack-cli": "^3.3.11"
+  }
+}
