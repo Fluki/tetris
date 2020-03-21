@@ -2,9 +2,11 @@ import Shape from "./shape.js";
 import Node from "./node.js";
 import Object from "./obj.js";
 import Controller from "./controler.js";
+import Tetromino from "./tetromino.js";
 
 const canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+ctx.fillStyle = "green";
 
 const numberOfNodesWidth = 12;
 const numberOfNodesHeight = 25;
@@ -14,7 +16,7 @@ class Game {
     this.objects = [];
     this.controller = new Controller();
   }
-  //treba da imamo shapes
+
   generateNodes() {
     const nodes = [];
     for (let i = 0; i < numberOfNodesHeight; i++) {
@@ -27,12 +29,35 @@ class Game {
     window.addEventListener("keyup", this.controller.handleKeyDownUp);
 
     this.nodes = nodes;
+    console.log(nodes);
   }
 
   spawnShape() {
-    const shapes = ["L", "J", "|", "O", "S", "Z"];
-    var shape = shapes[Math.floor(Math.random() * shapes.length)];
-    this.objects.push(new Object(shape, 5, 0));
+    if (
+      this.objects.length === 0 ||
+      this.objects[this.objects.length - 1].velocityY === 0
+    ) {
+      const shapes = ["I"];//["L", "J", "I", "O", "S", "Z", "T"];
+      var shape = shapes[Math.floor(Math.random() * shapes.length)];
+      this.objects.push(new Object(shape, 5, 0));
+    }
+  }
+
+  generateWalls() {
+    for (let i = 0; i < this.nodes.length; i++) {
+      if (this.nodes[i].position.y === 24) {
+        this.nodes[i].isPopulated = true;
+        this.nodes[i].isWall = true;
+      }
+      if (this.nodes[i].position.x === 0) {
+        this.nodes[i].isPopulated = true;
+        this.nodes[i].isWall = true;
+      }
+      if (this.nodes[i].position.x === 11) {
+        this.nodes[i].isPopulated = true;
+        this.nodes[i].isWall = true;
+      }
+    }
   }
 
   paint() {
@@ -52,6 +77,10 @@ class Game {
 
     for (let i = 0; i < this.nodes.length; i++) {
       if (this.nodes[i].isPopulated) {
+        ctx.fillStyle = this.nodes[i].color;
+        if (this.nodes[i].isWall) {
+          ctx.fillStyle = "black";
+        }
         ctx.fillRect(
           this.nodes[i].position.x * canvasX,
           this.nodes[i].position.y * canvasY,
@@ -65,38 +94,55 @@ class Game {
   startGameLoop() {
     setInterval(() => this.gameLoop(), 100);
   }
-  resetNodes() {
+
+  resetNodes() { 
     for (let i = 0; i < this.nodes.length; i++) {
       this.nodes[i].isPopulated = false;
     }
   }
+
+  checkForGameOver() {
+    // ako je jedan od poslednjih nodova naseljen
+    //pri cemu je brzina poslednja obj 0
+    //
+  }
+
   gameLoop() {
-    // function fallingDownLoop() {
-    //   this.objects[this.objects.length - 1].move();
-    // }
-    // console.log(controller);
-    // console.log(this);
+    this.spawnShape();
 
-    // move nam menja kordinate ne pitajuci za okolinu
-    this.objects[this.objects.length - 1].move();
+    const lastAdded = this.objects[this.objects.length - 1];
 
-    if (this.controller.right.active) {
-      this.objects[this.objects.length - 1].moveRight();
+    if (this.controller.right.active && lastAdded.velocityY) {
+      lastAdded.moveRight();
+    } else if (this.controller.left.active && lastAdded.velocityY) {
+      lastAdded.moveLeft();
+    } else {
+      lastAdded.stopHorizontaly();
+      console.log("stop");
+      // kad dodje do ovde iskluciti kontrle
     }
-    if (this.controller.left.active) {
-      this.objects[this.objects.length - 1].moveLeft();
+
+    if(this)controller.up.active{  lastAdded.rotate();
+
+
     }
-    this.resetNodes();
-    // debugger;
-    this.objects[this.objects.length - 1].addShapeToGrid(this.nodes);
+  
+  
+
+    for (let i = 0; i < this.objects.length; i++) {
+      this.objects[i].moveHorizontaly(this.nodes);
+      this.objects[i].moveVerticaly(this.nodes);
+    }
+
     this.paint();
   }
 }
 
 function init() {
   const test = new Game();
-  test.spawnShape();
+
   test.generateNodes();
+  test.generateWalls();
   test.startGameLoop();
 }
 

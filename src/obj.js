@@ -1,9 +1,24 @@
 import Shape from "./shape.js";
-
+import Node from "./node.js";
 class Object extends Shape {
   constructor(type, x, y) {
     super(type);
     this.position = { x, y };
+    //
+
+    this.orientation = 0;
+    // 0 default orijentacija
+    // 1 90 stepeni u smeru kazaljke u odnosu na 0
+    // 2 180 stepeni u smeru kazaljke u odnosu na 0
+    // 3 270 stepeni u smeru kazaljke u odnosu na 0
+
+    this.velocityY = 1; // 0 miruje
+    //horiznotalna brzina
+    this.velocityX = 0; // 1 desno -1 levo
+  }
+
+  rotate() {
+    this.this.orientation = (this.orientation + 1) % 4;
   }
 
   // prolaziti kroz svaki node i cekirati zatim vracati vrednost
@@ -17,19 +32,63 @@ class Object extends Shape {
   // brzina
   // gameover
   // multiplayer
+  canMove() {}
+  //Move ce se u buducnosti pozivati na svaki shape
+  // prvo pita za velocity
+  //pa levo desno
+  moveVerticaly(nodes) {
+    this.dePopulateNodes();
+    /////////////////////////////////////////////////////
+    //move i addShapeToGrid
+    //ne mora da ga brise prvo bolje prvo da proveri da li moze
+    //ako ne moze ostavlja ga na isto mestu ali mu v stavlja na 0
+    //
+    //1. brise ga
+    //2. proverava da li moze
+    //3. menja poziciju
+    //4. stavalja ga na novo mesto
 
-  move() {
-    this.position.y = this.position.y + 1;
-    if (this.position.y > 24) {
-      this.position.y = 24;
+    //Prvo pokusavam pomeranje
+    // this.position.x += this.velocityX;
+    this.position.y += this.velocityY;
+    //this.getNewNodes //ako moze vraca true ako ne moze vraca false
+    if (!this.setNewNodes(nodes)) {
+      //ako ne moze
+      //stari nacin horizotalni sudar gasi vertikalnu brzinu
+      //sto ne zelimo
+      //1. vraca poziciju na staro
+      //2. postavlja brzinu na nula
+
+      this.position.y -= this.velocityY;
+      this.velocityY = 0;
+      this.velocityX = 0;
+      //mora da zna da li je doslo do hor ili ver sudara
     }
+
+    this.populateNodes();
   }
+
+  moveHorizontaly(nodes) {
+    this.dePopulateNodes();
+
+    this.position.x += this.velocityX;
+    if (!this.setNewNodes(nodes)) {
+      this.position.x -= this.velocityX;
+      this.velocityX = 0;
+    }
+
+    this.populateNodes();
+  }
+
+  stopHorizontaly() {
+    this.velocityX = 0;
+  }
+
   moveLeft() {
-    //   TODO URADI DA MOZE LEPO DA SE SALTA levo i desno brze nego sto pada dole
-    this.position.x = this.position.x - 1;
+    this.velocityX = -1;
   }
   moveRight() {
-    this.position.x = this.position.x + 1;
+    this.velocityX = 1;
   }
 }
 
