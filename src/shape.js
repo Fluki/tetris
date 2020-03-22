@@ -1,4 +1,4 @@
-import Tetromino from "./tetromino.js";
+//import Tetromino from "./tetromino.js";
 
 class Shape {
   constructor(type) {
@@ -19,42 +19,42 @@ class Shape {
   //
   /////////////////////SAND BOX ////////////////////////////
   //mi ovde moramo da pitamo koja je orijentacija
-  test() {
-    if (this.orientation === 0 || this.orientation === 2) {
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = 0; j < 4; j++) {
-          if (
-            this.position.x === nodes[i].position.x &&
-            this.position.y + j === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-        }
-      }
-    }
-    //BITNO nama su x i y gornji desni ugao znaci
-    //da ali ce da rotiri oko gornjeg coska
-    // ne oko sredine
-    // more sve da se siftuje dole za 2 polja
-// moze?
-// za ovu dvojku se slazam ali sta kec radi??
-// pomera ga za 1 u desno nema smisla 
-//  u pravu si
-// nisam siguran sad mozda ce trebati neka korekcija aj da testiramo ovo
-    if (this.orientation === 1 || this.orientation === 3) {
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = 0; j < 4; j++) {
-          if (
-            this.position.x + j === nodes[i].position.x &&
-            this.position.y + 2 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-        }
-      }
-    }
-  }
-
+  // test() {
+  //   if (this.orientation === 0 || this.orientation === 2) {
+  //     for (let i = 0; i < nodes.length; i++) {
+  //       for (let j = 0; j < 4; j++) {
+  //         if (
+  //           this.position.x === nodes[i].position.x &&
+  //           this.position.y + j === nodes[i].position.y
+  //         ) {
+  //           newNodes.push(nodes[i]);
+  //         }
+  //       }
+  //     }
+  //   }
+  //BITNO nama su x i y gornji desni ugao znaci
+  //da ali ce da rotiri oko gornjeg coska
+  // ne oko sredine
+  // more sve da se siftuje dole za 2 polja
+  // moze?
+  // za ovu dvojku se slazam ali sta kec radi??
+  // pomera ga za 1 u desno nema smisla
+  //  u pravu si
+  // nisam siguran sad mozda ce trebati neka korekcija aj da testiramo ovo
+  //   if (this.orientation === 1 || this.orientation === 3) {
+  //     for (let i = 0; i < nodes.length; i++) {
+  //       for (let j = 0; j < 4; j++) {
+  //         if (
+  //           this.position.x + j === nodes[i].position.x &&
+  //           this.position.y + 2 === nodes[i].position.y
+  //         ) {
+  //           newNodes.push(nodes[i]);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  //
   /////////////////////////////////////////////////////
   //
   setColor() {
@@ -117,7 +117,7 @@ class Shape {
           for (let i = 0; i < nodes.length; i++) {
             for (let j = 0; j < 4; j++) {
               if (
-                this.position.x + j === nodes[i].position.x &&
+                this.position.x + j - 1 === nodes[i].position.x &&
                 this.position.y + 2 === nodes[i].position.y
               ) {
                 newNodes.push(nodes[i]);
@@ -125,96 +125,320 @@ class Shape {
             }
           }
         }
-    }
         break;
       case "L":
-        for (let i = 0; i < nodes.length; i++) {
-          if (
-            this.position.x + 1 === nodes[i].position.x &&
-            this.position.y + 2 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-
-          for (let j = 0; j < 3; j++) {
+        if (this.orientation === 0) {
+          for (let i = 0; i < nodes.length; i++) {
             if (
-              this.position.x === nodes[i].position.x &&
-              this.position.y + j === nodes[i].position.y
+              this.position.x + 2 === nodes[i].position.x &&
+              this.position.y + 2 === nodes[i].position.y
             ) {
               newNodes.push(nodes[i]);
+            }
+
+            for (let j = 0; j < 3; j++) {
+              if (
+                this.position.x + 1 === nodes[i].position.x &&
+                this.position.y + j === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+            }
+          }
+        }
+        if (this.orientation === 1) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let i = 0; i < nodes.length; i++) {
+              if (
+                this.position.x === nodes[i].position.x &&
+                this.position.y + 1 === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+
+              for (let j = 0; j < 3; j++) {
+                if (
+                  this.position.x + j === nodes[i].position.x &&
+                  this.position.y === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
+            }
+          }
+        }
+        if (this.orientation === 2) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let i = 0; i < nodes.length; i++) {
+              if (
+                this.position.x + 1 === nodes[i].position.x &&
+                this.position.y === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+
+              for (let j = 0; j < 3; j++) {
+                if (
+                  this.position.x + 2 === nodes[i].position.x &&
+                  this.position.y + j === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
+            }
+          }
+        }
+        if (this.orientation === 3) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let i = 0; i < nodes.length; i++) {
+              if (
+                this.position.x + 2 === nodes[i].position.x &&
+                this.position.y - 1 === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+
+              for (let j = 0; j < 3; j++) {
+                if (
+                  this.position.x + j === nodes[i].position.x &&
+                  this.position.y === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
             }
           }
         }
         break;
-      case "J":
-        for (let i = 0; i < nodes.length; i++) {
-          if (
-            this.position.x === nodes[i].position.x &&
-            this.position.y + 2 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
 
-          for (let j = 0; j < 3; j++) {
+      case "J":
+        if (this.orientation === 0) {
+          for (let i = 0; i < nodes.length; i++) {
             if (
-              this.position.x + 1 === nodes[i].position.x &&
-              this.position.y + j === nodes[i].position.y
+              this.position.x === nodes[i].position.x &&
+              this.position.y + 2 === nodes[i].position.y
             ) {
               newNodes.push(nodes[i]);
+            }
+
+            for (let j = 0; j < 3; j++) {
+              if (
+                this.position.x + 1 === nodes[i].position.x &&
+                this.position.y + j === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+            }
+          }
+        }
+        if (this.orientation === 1) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let i = 0; i < nodes.length; i++) {
+              if (
+                this.position.x === nodes[i].position.x &&
+                this.position.y - 1 === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+
+              for (let j = 0; j < 3; j++) {
+                if (
+                  this.position.x + j === nodes[i].position.x &&
+                  this.position.y === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
+            }
+          }
+        }
+        if (this.orientation === 2) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let i = 0; i < nodes.length; i++) {
+              if (
+                this.position.x + 2 === nodes[i].position.x &&
+                this.position.y === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+
+              for (let j = 0; j < 3; j++) {
+                if (
+                  this.position.x + 1 === nodes[i].position.x &&
+                  this.position.y + j === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
+            }
+          }
+        }
+        if (this.orientation === 3) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let i = 0; i < nodes.length; i++) {
+              if (
+                this.position.x + 2 === nodes[i].position.x &&
+                this.position.y + 1 === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+
+              for (let j = 0; j < 3; j++) {
+                if (
+                  this.position.x + j === nodes[i].position.x &&
+                  this.position.y === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
             }
           }
         }
         break;
       case "Z":
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = 0; j < 2; j++) {
-            for (let k = 0; k < 2; k++) {
-              if (
-                this.position.x + j + k === nodes[i].position.x &&
-                this.position.y + k === nodes[i].position.y
-              ) {
-                newNodes.push(nodes[i]);
+        if (this.orientation === 0 || this.orientation === 2) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = 0; j < 2; j++) {
+              for (let k = 0; k < 2; k++) {
+                if (
+                  this.position.x + j + k === nodes[i].position.x &&
+                  this.position.y + k === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
+            }
+          }
+        }
+
+        if (this.orientation === 1 || this.orientation === 3) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = 0; j < 2; j++) {
+              for (let k = 0; k < 2; k++) {
+                if (
+                  this.position.x + j === nodes[i].position.x &&
+                  this.position.y + k - j === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
               }
             }
           }
         }
         break;
+
       case "S":
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = 0; j < 2; j++) {
-            for (let k = 0; k < 2; k++) {
+        if (this.orientation === 0 || this.orientation === 2) {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = 0; j < 2; j++) {
+              for (let k = 0; k < 2; k++) {
+                if (
+                  this.position.x + j - k + 1 === nodes[i].position.x &&
+                  this.position.y + k === nodes[i].position.y
+                ) {
+                  newNodes.push(nodes[i]);
+                }
+              }
+            }
+          }
+
+          if (this.orientation === 1 || this.orientation === 3) {
+            for (let i = 0; i < nodes.length; i++) {
+              for (let j = 0; j < 2; j++) {
+                for (let k = 0; k < 2; k++) {
+                  if (
+                    this.position.x + j === nodes[i].position.x &&
+                    this.position.y + k === nodes[i].position.y
+                  ) {
+                    newNodes.push(nodes[i]);
+                  }
+                }
+              }
+            }
+          }
+        }
+        break;
+      case "T":
+        if (this.orientation === 0) {
+          for (let i = 0; i < nodes.length; i++) {
+            if (
+              this.position.x + 1 === nodes[i].position.x &&
+              this.position.y + 1 === nodes[i].position.y
+            ) {
+              newNodes.push(nodes[i]);
+            }
+
+            for (let j = 0; j < 3; j++) {
               if (
-                this.position.x + j - k + 1 === nodes[i].position.x &&
-                this.position.y + k === nodes[i].position.y
+                this.position.x + j === nodes[i].position.x &&
+                this.position.y === nodes[i].position.y
               ) {
                 newNodes.push(nodes[i]);
               }
             }
           }
         }
-        break;
-
-      case "T":
-        for (let i = 0; i < nodes.length; i++) {
-          if (
-            this.position.x + 1 === nodes[i].position.x &&
-            this.position.y + 1 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-
-          for (let j = 0; j < 3; j++) {
+        if (this.orientation === 1) {
+          for (let i = 0; i < nodes.length; i++) {
             if (
-              this.position.x + j === nodes[i].position.x &&
+              this.position.x + 1 === nodes[i].position.x &&
+              this.position.y + 1 === nodes[i].position.y
+            ) {
+              newNodes.push(nodes[i]);
+            }
+
+            for (let j = 0; j < 3; j++) {
+              if (
+                this.position.x === nodes[i].position.x &&
+                this.position.y + j === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+            }
+          }
+        }
+
+        if (this.orientation === 2) {
+          for (let i = 0; i < nodes.length; i++) {
+            if (
+              this.position.x + 1 === nodes[i].position.x &&
               this.position.y === nodes[i].position.y
             ) {
               newNodes.push(nodes[i]);
             }
+
+            for (let j = 0; j < 3; j++) {
+              if (
+                this.position.x + j === nodes[i].position.x &&
+                this.position.y + 1 === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+            }
           }
         }
+        if (this.orientation === 3) {
+          for (let i = 0; i < nodes.length; i++) {
+            if (
+              this.position.x === nodes[i].position.x &&
+              this.position.y + 1 === nodes[i].position.y
+            ) {
+              newNodes.push(nodes[i]);
+            }
+
+            for (let j = 0; j < 3; j++) {
+              if (
+                this.position.x + 1 === nodes[i].position.x &&
+                this.position.y + j === nodes[i].position.y
+              ) {
+                newNodes.push(nodes[i]);
+              }
+            }
+          }
+        }
+
         break;
     }
-
     for (let i = 0; i < newNodes.length; i++) {
       if (newNodes[i].isPopulated) {
         return false;

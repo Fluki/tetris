@@ -1,5 +1,6 @@
 import Shape from "./shape.js";
 import Node from "./node.js";
+
 class Object extends Shape {
   constructor(type, x, y) {
     super(type);
@@ -18,7 +19,7 @@ class Object extends Shape {
   }
 
   rotate() {
-    this.this.orientation = (this.orientation + 1) % 4;
+    this.orientation = (this.orientation + 1) % 4;
   }
 
   // prolaziti kroz svaki node i cekirati zatim vracati vrednost
@@ -32,11 +33,15 @@ class Object extends Shape {
   // brzina
   // gameover
   // multiplayer
-  canMove() {}
+
   //Move ce se u buducnosti pozivati na svaki shape
   // prvo pita za velocity
   //pa levo desno
-  moveVerticaly(nodes) {
+  moveVerticaly(nodes, generation) {
+    //seting the speed
+    if (generation !== 10) {
+      return;
+    }
     this.dePopulateNodes();
     /////////////////////////////////////////////////////
     //move i addShapeToGrid

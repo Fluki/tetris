@@ -2,7 +2,7 @@ import Shape from "./shape.js";
 import Node from "./node.js";
 import Object from "./obj.js";
 import Controller from "./controler.js";
-import Tetromino from "./tetromino.js";
+import Tetramino from "./tetromino.js";
 
 const canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -15,6 +15,14 @@ class Game {
   constructor() {
     this.objects = [];
     this.controller = new Controller();
+    this.generation = 0;
+  }
+
+  updateGeneration() {
+    this.generation++;
+    if (this.generation > 10) {
+      this.generation = 0;
+    }
   }
 
   generateNodes() {
@@ -37,9 +45,9 @@ class Game {
       this.objects.length === 0 ||
       this.objects[this.objects.length - 1].velocityY === 0
     ) {
-      const shapes = ["I"];//["L", "J", "I", "O", "S", "Z", "T"];
+      const shapes = ["L", "J", "I", "O", "S", "Z", "T"];
       var shape = shapes[Math.floor(Math.random() * shapes.length)];
-      this.objects.push(new Object(shape, 5, 0));
+      this.objects.push(new Tetramino(shape, 5, 0));
     }
   }
 
@@ -95,7 +103,7 @@ class Game {
     setInterval(() => this.gameLoop(), 100);
   }
 
-  resetNodes() { 
+  resetNodes() {
     for (let i = 0; i < this.nodes.length; i++) {
       this.nodes[i].isPopulated = false;
     }
@@ -108,6 +116,8 @@ class Game {
   }
 
   gameLoop() {
+    this.updateGeneration();
+
     this.spawnShape();
 
     const lastAdded = this.objects[this.objects.length - 1];
@@ -118,20 +128,15 @@ class Game {
       lastAdded.moveLeft();
     } else {
       lastAdded.stopHorizontaly();
-      console.log("stop");
-      // kad dodje do ovde iskluciti kontrle
     }
 
-    if(this)controller.up.active{  lastAdded.rotate();
-
-
+    if (this.controller.up.active) {
+      lastAdded.rotate();
     }
-  
-  
 
     for (let i = 0; i < this.objects.length; i++) {
       this.objects[i].moveHorizontaly(this.nodes);
-      this.objects[i].moveVerticaly(this.nodes);
+      this.objects[i].moveVerticaly(this.nodes, this.generation);
     }
 
     this.paint();

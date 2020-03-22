@@ -1,151 +1,116 @@
-import Object from "./obj.js";
-import Shape from "./shape.js";
+import setNodesSquare from "./setNodes/square.js";
+import setNodesPipe from "./setNodes/pipe.js";
+import setNodesL from "./setNodes/L.js";
+import setNodesJ from "./setNodes/J.js";
+import setNodesZ from "./setNodes/Z.js";
+import setNodesS from "./setNodes/S.js";
+import setNodesT from "./setNodes/T.js";
 
-class Tetromino {
+class Tetramino {
+  constructor(type, x, y) {
+    this.type = type;
+    this.nodes = [];
+    this.setColor();
+    this.position = { x, y };
+    this.orientation = 0;
+    this.velocityY = 1;
+    this.velocityX = 0;
+  }
 
-  const shape = new Shape();
+  rotate() {
+    this.orientation = (this.orientation + 1) % 4;
+  }
+
+  moveHorizontaly(nodes) {
+    this.dePopulateNodes();
+
+    this.position.x += this.velocityX;
+    if (!this.setNewNodes(nodes)) {
+      this.position.x -= this.velocityX;
+      this.velocityX = 0;
+    }
+
+    this.populateNodes();
+  }
+
+  stopHorizontaly() {
+    this.velocityX = 0;
+  }
+
+  moveLeft() {
+    this.velocityX = -1;
+  }
+  moveRight() {
+    this.velocityX = 1;
+  }
+
+  moveVerticaly(nodes, generation) {
+    //seting the speed
+    if (generation !== 10) {
+      return;
+    }
+    this.dePopulateNodes();
+    this.position.y += this.velocityY;
+
+    if (!this.setNewNodes(nodes)) {
+      this.position.y -= this.velocityY;
+      this.velocityY = 0;
+      this.velocityX = 0;
+    }
+
+    this.populateNodes();
+  }
 
   setColor() {
-    switch (shape.type) {
+    switch (this.type) {
       case "O":
-        shape.color = "yellow";
+        this.color = "yellow";
         break;
       case "I":
-        shape.color = "pink";
+        this.color = "pink";
         break;
       case "L":
-        shape.color = "orange";
+        this.color = "orange";
         break;
       case "J":
-        shape.color = "green";
+        this.color = "green";
         break;
       case "Z":
-        shape.color = "red";
+        this.color = "red";
         break;
       case "S":
-        shape.color = "blue";
+        this.color = "blue";
         break;
       case "T":
-        shape.color = "purple";
+        this.color = "purple";
         break;
     }
   }
-  setNewNodes(nodes) {
-    //arr
-    const newNodes = [];
 
-    switch (shape.type) {
+  setNewNodes(nodes) {
+    let newNodes;
+
+    switch (this.type) {
       case "O":
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = 0; j < 2; j++) {
-            for (let k = 0; k < 2; k++)
-              if (
-                shape.position.x + j === nodes[i].position.x &&
-                shape.position.y + k === nodes[i].position.y
-              ) {
-                newNodes.push(nodes[i]);
-              }
-          }
-        }
+        newNodes = setNodesSquare(nodes, this.position);
         break;
       case "I":
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = 0; j < 4; j++) {
-            if (
-              shape.position.x === nodes[i].position.x &&
-              shape.position.y + j === nodes[i].position.y
-            ) {
-              newNodes.push(nodes[i]);
-            }
-          }
-        }
+        newNodes = setNodesPipe(nodes, this.orientation, this.position);
         break;
       case "L":
-        for (let i = 0; i < nodes.length; i++) {
-          if (
-            shape.position.x + 1 === nodes[i].position.x &&
-            shape.position.y + 2 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-
-          for (let j = 0; j < 3; j++) {
-            if (
-              shape.position.x === nodes[i].position.x &&
-              shape.position.y + j === nodes[i].position.y
-            ) {
-              newNodes.push(nodes[i]);
-            }
-          }
-        }
+        newNodes = setNodesL(nodes, this.orientation, this.position);
         break;
       case "J":
-        for (let i = 0; i < nodes.length; i++) {
-          if (
-            shape.position.x === nodes[i].position.x &&
-            shape.position.y + 2 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-
-          for (let j = 0; j < 3; j++) {
-            if (
-              shape.position.x + 1 === nodes[i].position.x &&
-              shape.position.y + j === nodes[i].position.y
-            ) {
-              newNodes.push(nodes[i]);
-            }
-          }
-        }
+        newNodes = setNodesJ(nodes, this.orientation, this.position);
         break;
       case "Z":
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = 0; j < 2; j++) {
-            for (let k = 0; k < 2; k++) {
-              if (
-                shape.position.x + j + k === nodes[i].position.x &&
-                shape.position.y + k === nodes[i].position.y
-              ) {
-                newNodes.push(nodes[i]);
-              }
-            }
-          }
-        }
+        newNodes = setNodesZ(nodes, this.orientation, this.position);
         break;
       case "S":
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = 0; j < 2; j++) {
-            for (let k = 0; k < 2; k++) {
-              if (
-                shape.position.x + j - k + 1 === nodes[i].position.x &&
-                shape.position.y + k === nodes[i].position.y
-              ) {
-                newNodes.push(nodes[i]);
-              }
-            }
-          }
-        }
+        newNodes = setNodesS(nodes, this.orientation, this.position);
         break;
-
       case "T":
-        for (let i = 0; i < nodes.length; i++) {
-          if (
-            shape.position.x + 1 === nodes[i].position.x &&
-            shape.position.y + 1 === nodes[i].position.y
-          ) {
-            newNodes.push(nodes[i]);
-          }
-
-          for (let j = 0; j < 3; j++) {
-            if (
-              shape.position.x + j === nodes[i].position.x &&
-              shape.position.y === nodes[i].position.y
-            ) {
-              newNodes.push(nodes[i]);
-            }
-          }
-        }
-        break;
+        newNodes = setNodesT(nodes, this.orientation, this.position);
     }
 
     for (let i = 0; i < newNodes.length; i++) {
@@ -154,8 +119,29 @@ class Tetromino {
       }
     }
 
-    shape.nodes = newNodes;
+    this.nodes = newNodes;
     return true;
   }
+
+  dePopulateNodes() {
+    for (let i = 0; i < this.nodes.length; i++) {
+      this.nodes[i].isPopulated = false;
+    }
+  }
+
+  populateNodes() {
+    for (let i = 0; i < this.nodes.length; i++) {
+      this.nodes[i].isPopulated = true;
+      this.nodes[i].color = this.color;
+    }
+  }
+
+  removeShape() {
+    for (let i = 0; i < this.nodes.length; i++) {
+      this.nodes[i].isPopulated = false;
+    }
+    this.nodes = [];
+  }
 }
-export default Tetromino;
+
+export default Tetramino;
